@@ -1,25 +1,62 @@
-import './App.css';
-import { Overview, DatePick, UserInfo, VehicleSelect } from './components/Forms';
-import HorizontalNonLinearStepper from './components/Stepper';
+import React, { useState } from "react";
+
+import "./App.css";
+import {
+  Overview,
+  DatePick,
+  UserInfo,
+  VehicleSelect,
+} from "./components/Forms";
 
 function App() {
-  const forms = [
-    <Overview />,
-    <UserInfo />,
-    <VehicleSelect />,
-    <DatePick />
-  ];
+  const [step, setStep] = useState(1);
 
-  function isOverviewCompleted() {
-    return false;
-  }
+  const handleStepForward = () => {
+    setStep(step + 1);
+  };
+
+  const handleStepBackward = () => {
+    setStep(step - 1);
+  };
+
+  const renderForm = () => {
+    switch (step) {
+      case 1:
+        return <Overview handleStepForward={handleStepForward} />;
+
+      case 2:
+        return (
+          <UserInfo
+            handleStepForward={handleStepForward}
+            handleStepBackward={handleStepBackward}
+          />
+        );
+
+      case 3:
+        return (
+          <VehicleSelect
+            handleStepForward={handleStepForward}
+            handleStepBackward={handleStepBackward}
+          />
+        );
+
+      case 4:
+        return <DatePick handleStepBackward={handleStepBackward} />;
+
+      case 5:
+        return <></>;
+
+      default:
+        return <></>;
+    }
+  };
 
   return (
     <div className="App">
-     <div className='card'>
-      <h1>Rent a Vehical...</h1>
-      <HorizontalNonLinearStepper forms={forms} isOverviewCompleted={isOverviewCompleted}/>
-     </div>
+      <div className="card">
+        <h1>Rent a Vehical...</h1>
+        <div>{renderForm()}</div>
+      </div>
     </div>
   );
 }
