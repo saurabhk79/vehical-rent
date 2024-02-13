@@ -10,6 +10,18 @@ import {
 
 function App() {
   const [step, setStep] = useState(1);
+  const [formData, setFormData] = useState({
+    firstname: "",
+    lastname: "",
+    vehicalWheels: 0,
+    vehicleType: "",
+    startDate: "",
+    endDate: "",
+  });
+
+  const handleFormSubmission = (data) => {
+    setFormData({ ...formData, ...data });
+  };
 
   const handleStepForward = () => {
     setStep(step + 1);
@@ -29,6 +41,7 @@ function App() {
           <UserInfo
             handleStepForward={handleStepForward}
             handleStepBackward={handleStepBackward}
+            handleFormSubmission={handleFormSubmission}
           />
         );
 
@@ -41,7 +54,12 @@ function App() {
         );
 
       case 4:
-        return <DatePick handleStepBackward={handleStepBackward} />;
+        return (
+          <DatePick
+            handleStepBackward={handleStepBackward}
+            handleFormSubmission={handleFormSubmission}
+          />
+        );
 
       default:
         return <></>;

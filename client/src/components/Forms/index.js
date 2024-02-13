@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Stack,
   TextField,
@@ -26,7 +26,7 @@ export const Overview = ({ handleStepForward }) => {
 
       <Stack direction={"row"} justifyContent={"space-between"}>
         <div></div>
-        <Button variant="outlined" onClick={() => handleStepForward()}>
+        <Button variant="contained" onClick={() => handleStepForward()}>
           Next
         </Button>
       </Stack>
@@ -34,7 +34,25 @@ export const Overview = ({ handleStepForward }) => {
   );
 };
 
-export const UserInfo = ({ handleStepForward, handleStepBackward }) => {
+export const UserInfo = ({
+  handleStepForward,
+  handleStepBackward,
+  handleFormSubmission,
+}) => {
+  const [formData, setFormData] = useState({
+    firstname: "",
+    lastname: "",
+    isSubmitted: false,
+  });
+
+  const handleSubmit = () => {
+    const { firstname, lastname } = formData;
+
+    setFormData({ ...formData, isSubmitted: true });
+
+    handleFormSubmission({ firstname, lastname });
+  };
+
   return (
     <div className="steppers-wrapper">
       <form className="basic-form">
@@ -45,6 +63,10 @@ export const UserInfo = ({ handleStepForward, handleStepBackward }) => {
           variant="outlined"
           margin="normal"
           fullWidth
+          value={formData.firstname}
+          onChange={(e) =>
+            setFormData({ ...formData, firstname: e.target.value })
+          }
         />
         <TextField
           id="outlined-basic"
@@ -52,15 +74,29 @@ export const UserInfo = ({ handleStepForward, handleStepBackward }) => {
           margin="normal"
           variant="outlined"
           fullWidth
+          value={formData.lastname}
+          onChange={(e) =>
+            setFormData({ ...formData, lastname: e.target.value })
+          }
         />
       </form>
       <Stack direction={"row"} justifyContent={"space-between"}>
         <Button variant="outlined" onClick={() => handleStepBackward()}>
           Back
         </Button>
-        <Button variant="contained" onClick={() => handleStepForward()}>
-          Next
-        </Button>
+        {formData.isSubmitted ? (
+          <Button variant="contained" onClick={() => handleStepForward()}>
+            Next
+          </Button>
+        ) : (
+          <Button
+            variant="contained"
+            onClick={handleSubmit}
+            disabled={!formData.firstname || !formData.lastname}
+          >
+            Submit
+          </Button>
+        )}
       </Stack>
     </div>
   );
@@ -103,19 +139,86 @@ export const VehicleSelect = ({ handleStepForward, handleStepBackward }) => {
   );
 };
 
-export const DatePick = ({ handleStepBackward }) => {
+export const DatePick = ({ handleStepBackward, handleFormSubmission }) => {
+  const [rentDate, setRentDate] = useState({
+    startDate: "",
+    endDate: "",
+  });
+
+  const today = new Date().toISOString().split("T")[0];
+
+  const handleSubmit = () => {
+    const { startDate, endDate } = rentDate;
+
+    handleFormSubmission({ startDate, endDate });
+
+    setTimeout(() => {
+      window.location.reload();
+    }, 2000);
+  };
+
+  const handleStartDateChange = (e) => {
+    const selectedStartDate = e.target.value;
+    const selectedEndDate = rentDate.endDate;
+
+    if (selectedStartDate >= today) {
+      setRentDate({ ...rentDate, startDate: selectedStartDate });
+
+      if (selectedEndDate && selectedStartDate > selectedEndDate) {
+        setRentDate({ ...rentDate, endDate: "" });
+      }
+    }
+  };
+
+  const handleEndDateChange = (e) => {
+    const selectedEndDate = e.target.value;
+
+    if (selectedEndDate >= today && selectedEndDate >= rentDate.startDate) {
+      setRentDate({ ...rentDate, endDate: selectedEndDate });
+    }
+  };
+
   return (
     <div className="steppers-wrapper">
       <form className="basic-form">
         <h2>On which date?</h2>
-        <TextField type="date" fullWidth required />
+        <TextField
+          type="date"
+          label="Start date"
+          fullWidth
+          required
+          margin="normal"
+          value={rentDate.startDate}
+          min={today}
+          focused
+          onChange={handleStartDateChange}
+        />
+        {rentDate.startDate ? (
+          <TextField
+            type="date"
+            label="End date"
+            fullWidth
+            required
+            margin="normal"
+            value={rentDate.endDate}
+            min={rentDate.startDate || today}
+            focused
+            onChange={handleEndDateChange}
+          />
+        ) : (
+          <></>
+        )}
       </form>
       <Stack direction={"row"} justifyContent={"space-between"}>
         <Button variant="outlined" onClick={() => handleStepBackward()}>
           Back
         </Button>
 
-        <Button variant="contained" onClick={() => handleStepBackward()}>
+        <Button
+          variant="contained"
+          onClick={handleSubmit}
+          disabled={!rentDate.startDate || !rentDate.endDate}
+        >
           Book now!
         </Button>
       </Stack>
