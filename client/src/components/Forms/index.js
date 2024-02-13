@@ -10,15 +10,19 @@ import {
   Radio,
 } from "@mui/material";
 
+import "./forms.css";
+
 export const Overview = ({ handleStepForward }) => {
   return (
-    <>
-      <h3>Decided to rent a vehicle?</h3>
+    <div className="steppers-wrapper">
+      <div>
+        <h3>Decided to rent a vehicle?</h3>
 
-      <p>You can rent a vehicle, just by filling this form.</p>
-      <i>
-        So, what are you waiting for, hit the <b>next</b> button.
-      </i>
+        <p>You can rent a vehicle, just by filling this form.</p>
+        <i>
+          So, what are you waiting for, hit the <b>next</b> button.
+        </i>
+      </div>
 
       <Stack direction={"row"} justifyContent={"space-between"}>
         <div></div>
@@ -26,46 +30,47 @@ export const Overview = ({ handleStepForward }) => {
           Next
         </Button>
       </Stack>
-    </>
+    </div>
   );
 };
 
 export const UserInfo = ({ handleStepForward, handleStepBackward }) => {
   return (
-    <>
-      <h2>First, may I know your name?</h2>
+    <div className="steppers-wrapper">
       <form className="basic-form">
+        <h2>First, may I know your name?</h2>
         <TextField
           id="outlined-basic"
           label="First name"
           variant="outlined"
+          margin="normal"
           fullWidth
         />
         <TextField
           id="outlined-basic"
           label="Last name"
+          margin="normal"
           variant="outlined"
           fullWidth
         />
-
       </form>
       <Stack direction={"row"} justifyContent={"space-between"}>
         <Button variant="outlined" onClick={() => handleStepBackward()}>
           Back
         </Button>
-        <Button variant="outlined" onClick={() => handleStepForward()}>
+        <Button variant="contained" onClick={() => handleStepForward()}>
           Next
         </Button>
       </Stack>
-    </>
+    </div>
   );
 };
 
 export const VehicleSelect = ({ handleStepForward, handleStepBackward }) => {
   return (
-    <>
-      <h2>Choose your poison...</h2>
+    <div className="steppers-wrapper">
       <FormControl>
+        <h2>Choose your poison...</h2>
         <FormLabel id="demo-row-radio-buttons-group-label">
           Two or Four Wheeler
         </FormLabel>
@@ -90,21 +95,20 @@ export const VehicleSelect = ({ handleStepForward, handleStepBackward }) => {
         <Button variant="outlined" onClick={() => handleStepBackward()}>
           Back
         </Button>
-        <Button variant="outlined" onClick={() => handleStepForward()}>
+        <Button variant="contained" onClick={() => handleStepForward()}>
           Next
         </Button>
       </Stack>
-    </>
+    </div>
   );
 };
 
 export const DatePick = ({ handleStepBackward }) => {
   return (
-    <>
-      <h2>On which date?</h2>
+    <div className="steppers-wrapper">
       <form className="basic-form">
-        <input type="date" />
-
+        <h2>On which date?</h2>
+        <TextField type="date" fullWidth required />
       </form>
       <Stack direction={"row"} justifyContent={"space-between"}>
         <Button variant="outlined" onClick={() => handleStepBackward()}>
@@ -115,6 +119,6 @@ export const DatePick = ({ handleStepBackward }) => {
           Book now!
         </Button>
       </Stack>
-    </>
+    </div>
   );
 };

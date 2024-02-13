@@ -1,0 +1,6 @@
+.steppers-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 80%;
+    justify-content: space-between;
+}

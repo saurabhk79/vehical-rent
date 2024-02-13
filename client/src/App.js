@@ -43,9 +43,6 @@ function App() {
       case 4:
         return <DatePick handleStepBackward={handleStepBackward} />;
 
-      case 5:
-        return <></>;
-
       default:
         return <></>;
     }

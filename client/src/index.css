@@ -1,5 +1,5 @@
 #root {
-    --color-background:#023047;
+    --color-background:#1976D2;
     --color-cardBackground: #ffffff;
 }
 
@@ -20,6 +20,6 @@ img {
   max-width: 100%;
 }
 
-input {
-  width: 100%;
+h2,h3,h4 {
+  margin: 12px 0;
 }
