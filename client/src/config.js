@@ -1,3 +1,3 @@
 export const keys = {
-    url: "http://localhost:9872"
+    url: "https://vehicalrentbackend.onrender.com/"
 }
