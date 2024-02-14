@@ -35,7 +35,8 @@ app.get("/vehicles", (req, res) => {
   const vehicleType = req.query.type;
 
   db.all(
-    `SELECT * FROM vehicles where vehicleType=?`, [vehicleType],
+    `SELECT * FROM vehicles where vehicleType=?`,
+    [vehicleType],
     (err, rows) => {
       if (err) {
         console.log(err);
@@ -45,6 +46,35 @@ app.get("/vehicles", (req, res) => {
   );
 });
 
+app.post("/user", (req, res) => {
+  const user = req.body;
+
+  db.run("UPDATE vehicles SET isBooked=? where vehicleName=?", [
+    0,
+    user.vehicleName,
+  ]);
+
+  db.run(
+    "INSERT INTO user (firstname, lastname, vehicleName, vehicleWheels, vehicleType,startDate,endDate) VALUES (?,?,?,?,?,?,?)",
+    [
+      user.firstname,
+      user.lastname,
+      user.vehicleName,
+      user.vehicleWheels,
+      user.vehicleType,
+      user.startDate,
+      user.endDate,
+    ],
+    (err) => {
+      if (err) {
+        console.log(err);
+        return res.status(500).send("Internal Server Error!");
+      }
+
+      return res.status(201).send("Successful!");
+    }
+  );
+});
 
 app.listen(PORT, () => {
   console.log("Running on http://localhost:" + PORT);

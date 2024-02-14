@@ -17,20 +17,21 @@ db.serialize(() => {
           )
       `);
 
-  // db.run(`
-  //         CREATE TABLE IF NOT EXISTS user (
-  //             id INTEGER PRIMARY KEY,
-  //             firstname TEXT,
-  //             lastname TEXT,
-  //             wheels INTEGER,
-  //             vehicleType TEXT,
-  //             startDate TIMESTAMP,
-  //             endDate TIMESTAMP
-  //         )
-  //     `);
+  db.run(`
+          CREATE TABLE IF NOT EXISTS user (
+              id INTEGER PRIMARY KEY,
+              firstname TEXT,
+              lastname TEXT,
+              vehicleName TEXT,
+              vehicleWheels INTEGER,
+              vehicleType TEXT,
+              startDate TIMESTAMP,
+              endDate TIMESTAMP
+          )
+      `);
 });
 
-// added some
+// added some initial valus
 db.serialize(() => {
   db.get("SELECT COUNT(*) AS count FROM vehicles", (err, row) => {
     if (err) {
