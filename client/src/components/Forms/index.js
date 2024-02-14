@@ -114,10 +114,20 @@ export const VehicleSelect = ({
     isSubmitted: false,
   });
 
+  const [vehiclesType, setVehiclesType] = useState([]);
   const [vehicles, setVehicles] = useState([]);
 
-  const fetchVehicles = async (wheels) => {
-    const res = await fetch(`http://localhost:9872/wheels?wheels=${wheels}`);
+  const fetchVehiclesType = async (wheels) => {
+    const res = await fetch(
+      `http://localhost:9872/vehicletype?wheels=${wheels}`
+    );
+    const data = await res.json();
+
+    setVehiclesType(data);
+  };
+
+  const fetchVehicles = async (type) => {
+    const res = await fetch(`http://localhost:9872/vehicles?type=${type}`);
     const data = await res.json();
 
     setVehicles(data);
@@ -126,11 +136,24 @@ export const VehicleSelect = ({
   const handleWheels = (e) => {
     setVehicleData({ ...vehicleData, vehicleWheels: e.target.value });
 
+    fetchVehiclesType(e.target.value);
+  };
+
+  const handleType = (e) => {
+    setVehicleData({
+      ...vehicleData,
+      vehicleType: e.target.value,
+    });
+
     fetchVehicles(e.target.value);
-    console.log(vehicles.length);
   };
 
   const handleSubmit = (e) => {
+    setVehicleData({
+      ...vehicleData,
+      vehicleName: e.target.value,
+    });
+
     setVehicleData({ ...vehicleData, isSubmitted: true });
 
     const { vehicleName, vehicleType, vehicleWheels } = vehicleData;
@@ -149,13 +172,9 @@ export const VehicleSelect = ({
           value={vehicleData.vehicleWheels}
           onChange={handleWheels}
         >
+          <FormControlLabel value={2} control={<Radio />} label="Two wheeler" />
           <FormControlLabel
-            value="female"
-            control={<Radio />}
-            label="Two wheeler"
-          />
-          <FormControlLabel
-            value="male"
+            value={4}
             control={<Radio />}
             label="Four wheeler"
           />
@@ -169,23 +188,18 @@ export const VehicleSelect = ({
               aria-labelledby="vehicle-wheels"
               name="row-radio-buttons-group"
               value={vehicleData.vehicleType}
-              onChange={(e) =>
-                setVehicleData({
-                  ...vehicleData,
-                  vehicleType: e.target.value,
-                })
-              }
+              onChange={handleType}
             >
-              <FormControlLabel
-                value="female"
-                control={<Radio />}
-                label="Two wheeler"
-              />
-              <FormControlLabel
-                value="male"
-                control={<Radio />}
-                label="Four wheeler"
-              />
+              {vehiclesType.map((type, idx) => {
+                return (
+                  <FormControlLabel
+                    value={type}
+                    control={<Radio />}
+                    label={type}
+                    key={idx}
+                  />
+                );
+              })}
             </RadioGroup>
           </>
         ) : null}
@@ -198,18 +212,20 @@ export const VehicleSelect = ({
               aria-labelledby="vehicle-wheels"
               name="row-radio-buttons-group"
               value={vehicleData.vehicleName}
-              onChange={handleWheels}
+              onChange={(e) =>
+                setVehicleData({ ...vehicleData, vehicleName: e.target.value })
+              }
             >
-              <FormControlLabel
-                value="female"
-                control={<Radio />}
-                label="Two wheeler"
-              />
-              <FormControlLabel
-                value="male"
-                control={<Radio />}
-                label="Four wheeler"
-              />
+              {vehicles.map((veh) => {
+                return (
+                  <FormControlLabel
+                    value={veh.vehicleName}
+                    control={<Radio />}
+                    label={veh.vehicleName}
+                    key={veh.id}
+                  />
+                );
+              })}
             </RadioGroup>
           </>
         ) : null}
@@ -240,7 +256,7 @@ export const VehicleSelect = ({
   );
 };
 
-export const DatePick = ({ handleStepBackward, handleFormSubmission }) => {
+export const DatePick = ({ handleStepBackward, handleFormSubmission, handleCreateUserBooking }) => {
   const [rentDate, setRentDate] = useState({
     startDate: "",
     endDate: "",
@@ -252,6 +268,8 @@ export const DatePick = ({ handleStepBackward, handleFormSubmission }) => {
     const { startDate, endDate } = rentDate;
 
     handleFormSubmission({ startDate, endDate });
+
+    handleCreateUserBooking();
 
     setTimeout(() => {
       window.location.reload();

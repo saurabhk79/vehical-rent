@@ -32,6 +32,10 @@ function App() {
     setStep(step - 1);
   };
 
+  const handleCreateUserBooking = async () => {
+    console.log(formData)
+  }
+
   const renderForm = () => {
     switch (step) {
       case 1:
@@ -51,6 +55,7 @@ function App() {
           <VehicleSelect
             handleStepForward={handleStepForward}
             handleStepBackward={handleStepBackward}
+            handleFormSubmission={handleFormSubmission}
           />
         );
 
@@ -59,6 +64,7 @@ function App() {
           <DatePick
             handleStepBackward={handleStepBackward}
             handleFormSubmission={handleFormSubmission}
+            handleCreateUserBooking={handleCreateUserBooking}
           />
         );
 

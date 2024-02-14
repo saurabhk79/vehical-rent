@@ -35,7 +35,7 @@ app.get("/vehicles", (req, res) => {
   const vehicleType = req.query.type;
 
   db.all(
-    `SELECT * FROM vehicles where vehicleType=${vehicleType}`,
+    `SELECT * FROM vehicles where vehicleType=?`, [vehicleType],
     (err, rows) => {
       if (err) {
         console.log(err);
