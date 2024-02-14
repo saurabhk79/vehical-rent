@@ -25,8 +25,8 @@ db.serialize(() => {
               vehicleName TEXT,
               vehicleWheels INTEGER,
               vehicleType TEXT,
-              startDate TIMESTAMP,
-              endDate TIMESTAMP
+              startDate TEXT,
+              endDate TEXT
           )
       `);
 });

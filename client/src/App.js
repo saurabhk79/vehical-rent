@@ -33,8 +33,18 @@ function App() {
   };
 
   const handleCreateUserBooking = async () => {
-    console.log(formData)
-  }
+    console.log(formData);
+
+    await fetch("http://localhost:9872/user", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+
+    alert("Successful!")
+  };
 
   const renderForm = () => {
     switch (step) {

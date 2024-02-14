@@ -130,7 +130,7 @@ export const VehicleSelect = ({
     const res = await fetch(`http://localhost:9872/vehicles?type=${type}`);
     const data = await res.json();
 
-    setVehicles(data);
+    setVehicles(data.filter((veh)=> veh.isBooked === 1));
   };
 
   const handleWheels = (e) => {
@@ -273,7 +273,7 @@ export const DatePick = ({ handleStepBackward, handleFormSubmission, handleCreat
 
     setTimeout(() => {
       window.location.reload();
-    }, 2000);
+    }, 8000);
   };
 
   const handleStartDateChange = (e) => {
