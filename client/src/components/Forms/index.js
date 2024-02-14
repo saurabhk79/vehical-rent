@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 
 import "./forms.css";
+import { keys } from "../../config";
 
 export const Overview = ({ handleStepForward }) => {
   return (
@@ -119,7 +120,7 @@ export const VehicleSelect = ({
 
   const fetchVehiclesType = async (wheels) => {
     const res = await fetch(
-      `http://localhost:9872/vehicletype?wheels=${wheels}`
+      `${keys.url}/vehicletype?wheels=${wheels}`
     );
     const data = await res.json();
 
@@ -127,7 +128,7 @@ export const VehicleSelect = ({
   };
 
   const fetchVehicles = async (type) => {
-    const res = await fetch(`http://localhost:9872/vehicles?type=${type}`);
+    const res = await fetch(`${keys.url}/vehicles?type=${type}`);
     const data = await res.json();
 
     setVehicles(data.filter((veh)=> veh.isBooked === 1));

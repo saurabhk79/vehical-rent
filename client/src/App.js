@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 
+import { keys } from "./config";
 import "./App.css";
 import {
   Overview,
@@ -35,7 +36,7 @@ function App() {
   const handleCreateUserBooking = async () => {
     console.log(formData);
 
-    await fetch("http://localhost:9872/user", {
+    await fetch(keys.url + "/user", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
