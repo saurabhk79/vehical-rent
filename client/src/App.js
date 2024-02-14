@@ -13,7 +13,8 @@ function App() {
   const [formData, setFormData] = useState({
     firstname: "",
     lastname: "",
-    vehicalWheels: 0,
+    vehicleName: "",
+    vehicleWheels: 0,
     vehicleType: "",
     startDate: "",
     endDate: "",

@@ -102,18 +102,52 @@ export const UserInfo = ({
   );
 };
 
-export const VehicleSelect = ({ handleStepForward, handleStepBackward }) => {
+export const VehicleSelect = ({
+  handleStepForward,
+  handleStepBackward,
+  handleFormSubmission,
+}) => {
+  const [vehicleData, setVehicleData] = useState({
+    vehicleWheels: 0,
+    vehicleName: "",
+    vehicleType: "",
+    isSubmitted: false,
+  });
+
+  const [vehicles, setVehicles] = useState([]);
+
+  const fetchVehicles = async (wheels) => {
+    const res = await fetch(`http://localhost:9872/wheels?wheels=${wheels}`);
+    const data = await res.json();
+
+    setVehicles(data);
+  };
+
+  const handleWheels = (e) => {
+    setVehicleData({ ...vehicleData, vehicleWheels: e.target.value });
+
+    fetchVehicles(e.target.value);
+    console.log(vehicles.length);
+  };
+
+  const handleSubmit = (e) => {
+    setVehicleData({ ...vehicleData, isSubmitted: true });
+
+    const { vehicleName, vehicleType, vehicleWheels } = vehicleData;
+    handleFormSubmission({ vehicleName, vehicleType, vehicleWheels });
+  };
+
   return (
     <div className="steppers-wrapper">
       <FormControl>
-        <h2>Choose your poison...</h2>
-        <FormLabel id="demo-row-radio-buttons-group-label">
-          Two or Four Wheeler
-        </FormLabel>
+        <h2>Choose your vehicle...</h2>
+        <FormLabel id="vehicle-wheels">Two or Four Wheeler</FormLabel>
         <RadioGroup
           row
-          aria-labelledby="demo-row-radio-buttons-group-label"
+          aria-labelledby="vehicle-wheels"
           name="row-radio-buttons-group"
+          value={vehicleData.vehicleWheels}
+          onChange={handleWheels}
         >
           <FormControlLabel
             value="female"
@@ -126,14 +160,81 @@ export const VehicleSelect = ({ handleStepForward, handleStepBackward }) => {
             label="Four wheeler"
           />
         </RadioGroup>
+
+        {vehicleData.vehicleWheels !== 0 ? (
+          <>
+            <FormLabel id="vehicle-wheels">Vehicle Type</FormLabel>
+            <RadioGroup
+              row
+              aria-labelledby="vehicle-wheels"
+              name="row-radio-buttons-group"
+              value={vehicleData.vehicleType}
+              onChange={(e) =>
+                setVehicleData({
+                  ...vehicleData,
+                  vehicleType: e.target.value,
+                })
+              }
+            >
+              <FormControlLabel
+                value="female"
+                control={<Radio />}
+                label="Two wheeler"
+              />
+              <FormControlLabel
+                value="male"
+                control={<Radio />}
+                label="Four wheeler"
+              />
+            </RadioGroup>
+          </>
+        ) : null}
+
+        {vehicleData.vehicleType.length !== 0 ? (
+          <>
+            <FormLabel id="vehicle-wheels">Vehicle</FormLabel>
+            <RadioGroup
+              row
+              aria-labelledby="vehicle-wheels"
+              name="row-radio-buttons-group"
+              value={vehicleData.vehicleName}
+              onChange={handleWheels}
+            >
+              <FormControlLabel
+                value="female"
+                control={<Radio />}
+                label="Two wheeler"
+              />
+              <FormControlLabel
+                value="male"
+                control={<Radio />}
+                label="Four wheeler"
+              />
+            </RadioGroup>
+          </>
+        ) : null}
       </FormControl>
       <Stack direction={"row"} justifyContent={"space-between"}>
         <Button variant="outlined" onClick={() => handleStepBackward()}>
           Back
         </Button>
-        <Button variant="contained" onClick={() => handleStepForward()}>
-          Next
-        </Button>
+        {vehicleData.isSubmitted ? (
+          <Button variant="contained" onClick={() => handleStepForward()}>
+            Next
+          </Button>
+        ) : (
+          <Button
+            variant="contained"
+            onClick={handleSubmit}
+            disabled={
+              !vehicleData.vehicleWheels ||
+              !vehicleData.vehicleType ||
+              !vehicleData.vehicleName
+            }
+          >
+            Submit
+          </Button>
+        )}
       </Stack>
     </div>
   );
